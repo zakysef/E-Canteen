@@ -3,82 +3,68 @@
 @section('title', 'Daftar')
 
 @section('content')
-<div class="min-h-screen flex"
+
+{{-- Outer: fixed+scroll agar gradient selalu penuh, tidak ada gap putih --}}
+<div class="fixed inset-0 overflow-y-auto"
+     style="background: linear-gradient(135deg, #be185d 0%, #db2777 50%, #f43f5e 100%);"
      x-data="{ showPassword: false, showConfirm: false }">
 
-    {{-- ============================================================ --}}
-    {{-- LEFT PANEL — decorative (hidden on mobile) --}}
-    {{-- ============================================================ --}}
-    <div class="hidden lg:flex lg:w-5/12 xl:w-1/2 relative overflow-hidden flex-col items-center justify-center p-12 flex-shrink-0"
-         style="background: linear-gradient(135deg, #be185d 0%, #db2777 50%, #f43f5e 100%);">
+    {{-- Background pattern --}}
+    <div class="absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true"
+         style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 28px 28px;"></div>
 
-        {{-- Background pattern --}}
-        <div class="absolute inset-0 opacity-10" aria-hidden="true"
-             style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 28px 28px;"></div>
+    {{-- Decorative blobs --}}
+    <div class="fixed -top-24 -left-24 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+    <div class="fixed -bottom-24 -right-24 w-80 h-80 bg-rose-300/20 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
 
-        {{-- Blobs --}}
-        <div class="absolute -top-24 -left-24 w-80 h-80 bg-white/10 rounded-full blur-3xl" aria-hidden="true"></div>
-        <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-rose-300/20 rounded-full blur-3xl" aria-hidden="true"></div>
+    {{-- Content wrapper --}}
+    <div class="relative z-10 flex items-center justify-center p-4 sm:p-6 py-10">
+        <div class="w-full max-w-md">
 
-        {{-- Content --}}
-        <div class="relative z-10 text-white text-center max-w-sm">
-
-            <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
-                <i class="ph ph-fork-knife text-white text-4xl"></i>
+            {{-- Tombol Kembali ke Beranda — di atas card --}}
+            <div class="mb-5">
+                <a href="{{ url('/') }}"
+                   class="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm px-3.5 py-2 rounded-xl transition-all shadow-sm">
+                    <i class="ph ph-arrow-left text-sm"></i>
+                    Kembali ke Beranda
+                </a>
             </div>
 
-            <h2 class="text-4xl font-black mb-3 leading-tight">Bergabung<br>Sekarang!</h2>
-            <p class="text-pink-100 text-base font-medium mb-2">Sistem Kantin Digital</p>
-            <p class="text-pink-200 text-sm leading-relaxed mb-10">
-                Daftar sekali, nikmati kemudahan pesan makan siang tanpa antri setiap hari.
-            </p>
-
-            {{-- Benefit list --}}
-            <ul class="space-y-4 text-left">
-                @foreach([
-                    ['ph-identification-card', 'Daftar dengan NIS siswa'],
-                    ['ph-wallet',              'Saldo digital untuk pembayaran'],
-                    ['ph-bell',                'Notifikasi pesanan real-time'],
-                    ['ph-history',             'Riwayat transaksi lengkap'],
-                ] as [$icon, $text])
-                <li class="flex items-center gap-3 text-sm text-pink-50">
-                    <span class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <i class="ph {{ $icon }} text-white text-base"></i>
-                    </span>
-                    {{ $text }}
-                </li>
-                @endforeach
-            </ul>
-        </div>
-
-        <p class="absolute bottom-6 text-pink-200/60 text-xs">
-            &copy; {{ date('Y') }} E-Canteen. Hak cipta dilindungi.
-        </p>
-    </div>
-
-    {{-- ============================================================ --}}
-    {{-- RIGHT PANEL — register form (scrollable) --}}
-    {{-- ============================================================ --}}
-    <div class="w-full lg:w-7/12 xl:w-1/2 flex items-start justify-center p-6 sm:p-10 bg-gradient-to-br from-pink-50 via-white to-rose-50 overflow-y-auto min-h-screen">
-
-        <div class="w-full max-w-md py-8">
-
-            {{-- Mobile logo --}}
-            <div class="flex items-center justify-center gap-2.5 mb-8 lg:hidden">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
-                     style="background: linear-gradient(135deg,#db2777,#f43f5e);">
-                    <i class="ph ph-fork-knife text-white text-lg"></i>
+            {{-- Logo & branding --}}
+            <div class="flex flex-col items-center mb-7 text-center">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 shadow-xl ring-1 ring-white/30">
+                    <i class="ph ph-fork-knife text-white text-3xl"></i>
                 </div>
-                <span class="text-2xl font-black text-gray-900">E-<span class="text-pink-600">Canteen</span></span>
+                <h2 class="text-3xl font-black text-white tracking-tight">E-Canteen</h2>
+                <p class="text-pink-100 text-sm mt-1">Sistem Pre-Order Kantin Digital</p>
             </div>
 
             {{-- Card --}}
-            <div class="card p-8 sm:p-10 shadow-xl shadow-pink-100/50">
+            <div class="card p-8 sm:p-10 shadow-2xl shadow-black/20">
 
                 {{-- Header --}}
-                <div class="mb-8">
+                <div class="mb-7">
                     <h1 class="text-2xl font-black text-gray-900 mb-1.5">Buat Akun Baru</h1>
                     <p class="text-sm text-gray-500">Isi formulir di bawah untuk mendaftarkan akunmu.</p>
+                </div>
+
+                {{-- Google register button --}}
+                <a href="{{ route('auth.google') }}"
+                   class="flex items-center justify-center gap-3 w-full py-2.5 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm shadow-sm hover:shadow transition-all mb-5">
+                    <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Daftar dengan Google
+                </a>
+
+                {{-- Divider --}}
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                    <span class="text-xs text-gray-400 font-medium">atau daftar dengan email</span>
+                    <div class="flex-1 h-px bg-gray-200"></div>
                 </div>
 
                 {{-- Form --}}
@@ -136,9 +122,7 @@
 
                     {{-- 3. NIS --}}
                     <div>
-                        <label for="identifier" class="form-label">
-                            Nomor Induk Siswa (NIS)
-                        </label>
+                        <label for="identifier" class="form-label">Nomor Induk Siswa (NIS)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                 <i class="ph ph-identification-card text-gray-400 text-base"></i>
@@ -190,7 +174,7 @@
                         @enderror
                     </div>
 
-                    {{-- 5. No. Telepon (optional) --}}
+                    {{-- 5. No. Telepon (opsional) --}}
                     <div>
                         <label for="phone" class="form-label">
                             No. Telepon
@@ -285,7 +269,7 @@
 
                 </form>
 
-                {{-- Divider --}}
+                {{-- Footer link --}}
                 <div class="mt-6 pt-6 border-t border-pink-100 text-center">
                     <p class="text-sm text-gray-500">
                         Sudah punya akun?
@@ -296,14 +280,6 @@
                     </p>
                 </div>
 
-            </div>
-
-            {{-- Back to home --}}
-            <div class="mt-6 text-center">
-                <a href="{{ url('/') }}" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-pink-600 transition-colors">
-                    <i class="ph ph-arrow-left text-sm"></i>
-                    Kembali ke Beranda
-                </a>
             </div>
 
         </div>

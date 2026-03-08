@@ -23,6 +23,8 @@ class User extends Authenticatable
         'nomor_rekening',
         'nama_bank',
         'is_active',
+        'google_id',
+        'avatar',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -53,7 +55,7 @@ class User extends Authenticatable
 
     public function getRoleLabelAttribute(): string
     {
-        return match($this->role) {
+        return match ($this->role) {
             'super_admin' => 'Super Admin',
             'admin'       => $this->nama_toko ? "Penjual · {$this->nama_toko}" : 'Penjual',
             'user'        => $this->kelas ? "Jurusan {$this->kelas}" : 'Siswa/Guru',
