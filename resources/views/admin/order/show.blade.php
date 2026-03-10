@@ -9,22 +9,22 @@
 
     {{-- Back link --}}
     <a href="{{ route('admin.orders.index') }}"
-       class="inline-flex items-center gap-2 text-sm text-orange-600 hover:text-orange-700 font-medium mb-6">
+       class="inline-flex items-center gap-2 text-sm text-rose-600 hover:text-rose-700 font-medium mb-6">
         <i class="ph ph-arrow-left"></i> Kembali ke Antrian Pesanan
     </a>
 
     @php
         $statusConfig = match($order->status) {
             'pending'   => ['bg-yellow-100 text-yellow-700', 'Menunggu Pembayaran', 'ph-clock'],
-            'paid'      => ['bg-blue-100 text-blue-700',     'Dibayar',             'ph-check'],
-            'preparing' => ['bg-indigo-100 text-indigo-700', 'Sedang Disiapkan',    'ph-fork-knife'],
+            'paid'      => ['bg-pink-100 text-pink-700',     'Dibayar',             'ph-check'],
+            'preparing' => ['bg-rose-100 text-rose-700',     'Sedang Disiapkan',    'ph-fork-knife'],
             'ready'     => ['bg-green-100 text-green-700',   'Siap Diambil',        'ph-check-circle'],
             'completed' => ['bg-gray-100 text-gray-700',     'Selesai',             'ph-check-circle'],
             'cancelled' => ['bg-red-100 text-red-700',       'Dibatalkan',          'ph-x-circle'],
             default     => ['bg-gray-100 text-gray-600',     ucfirst($order->status), 'ph-clock'],
         };
         $waktuLabel  = $order->waktu_pengambilan === 'istirahat_1' ? 'Istirahat 1' : 'Istirahat 2';
-        $waktuColor  = $order->waktu_pengambilan === 'istirahat_1' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700';
+        $waktuColor  = $order->waktu_pengambilan === 'istirahat_1' ? 'bg-pink-100 text-pink-700' : 'bg-rose-100 text-rose-700';
     @endphp
 
     {{-- Order header card --}}
@@ -53,7 +53,7 @@
                     @csrf @method('PATCH')
                     <input type="hidden" name="status" value="preparing">
                     <button type="submit"
-                            class="btn-primary inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700">
+                            class="btn-primary inline-flex items-center gap-2">
                         <i class="ph ph-fork-knife"></i> Mulai Siapkan
                     </button>
                 </form>
@@ -62,7 +62,7 @@
                     @csrf @method('PATCH')
                     <input type="hidden" name="status" value="ready">
                     <button type="submit"
-                            class="btn-primary inline-flex items-center gap-2 bg-green-600 hover:bg-green-700">
+                            class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-xl transition-colors text-sm">
                         <i class="ph ph-check"></i> Tandai Siap Diambil
                     </button>
                 </form>
@@ -71,7 +71,7 @@
                     @csrf @method('PATCH')
                     <input type="hidden" name="status" value="completed">
                     <button type="submit"
-                            class="btn-primary inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700">
+                            class="inline-flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors text-sm">
                         <i class="ph ph-check-circle"></i> Selesaikan Pesanan
                     </button>
                 </form>
@@ -86,9 +86,9 @@
             {{-- Pemesan --}}
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Informasi Pemesan</p>
-                <div class="bg-gray-50 rounded-xl p-4 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-sm shrink-0">
+                    <div class="bg-pink-50 rounded-xl p-4 space-y-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm shrink-0">
                             {{ strtoupper(substr($order->user->name, 0, 2)) }}
                         </div>
                         <div>
@@ -107,7 +107,7 @@
             {{-- Waktu & Catatan --}}
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Detail Pesanan</p>
-                <div class="bg-gray-50 rounded-xl p-4 space-y-3">
+                <div class="bg-pink-50 rounded-xl p-4 space-y-3">
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-gray-500">Waktu Pengambilan</span>
                         <span class="badge {{ $waktuColor }}">
@@ -150,14 +150,14 @@
                 @foreach($timestamps as $i => $ts)
                 <div class="flex items-center shrink-0">
                     <div class="flex flex-col items-center">
-                        <div class="w-7 h-7 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center">
+                        <div class="w-7 h-7 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center">
                             <i class="ph ph-check text-xs font-bold"></i>
                         </div>
                         <p class="text-[10px] text-gray-500 mt-1 whitespace-nowrap">{{ $ts['label'] }}</p>
                         <p class="text-[10px] text-gray-400">{{ $ts['time']->format('H:i') }}</p>
                     </div>
                     @if(!$loop->last)
-                    <div class="w-10 h-px bg-orange-200 shrink-0"></div>
+                    <div class="w-10 h-px bg-rose-200 shrink-0"></div>
                     @endif
                 </div>
                 @endforeach
@@ -170,9 +170,9 @@
     {{-- Items table --}}
     <div class="card overflow-hidden mb-5">
         <div class="px-6 py-4 border-b border-pink-100 flex items-center gap-2">
-            <i class="ph ph-fork-knife text-orange-500"></i>
+            <i class="ph ph-fork-knife text-rose-500"></i>
             <h3 class="font-semibold text-gray-800">Item Pesanan</h3>
-            <span class="badge bg-orange-100 text-orange-700 ml-1">{{ $order->items->count() }} item</span>
+            <span class="badge bg-rose-100 text-rose-700 ml-1">{{ $order->items->count() }} item</span>
         </div>
         <table class="data-table w-full">
             <thead>
@@ -193,7 +193,7 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <span class="font-semibold text-orange-600">{{ $item->qty }}</span>
+                        <span class="font-semibold text-rose-600">{{ $item->qty }}</span>
                     </td>
                     <td class="text-right text-gray-600">
                         Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}
@@ -207,7 +207,7 @@
         </table>
 
         {{-- Total section --}}
-        <div class="px-6 py-4 border-t border-pink-100 bg-orange-50/40">
+        <div class="px-6 py-4 border-t border-pink-100 bg-pink-50/40">
             <div class="flex items-center justify-between">
                 <div class="space-y-1">
                     <div class="flex items-center gap-8 text-sm text-gray-500">
@@ -217,7 +217,7 @@
                 </div>
                 <div class="text-right">
                     <p class="text-xs text-gray-500 mb-0.5">Total Pembayaran</p>
-                    <p class="text-2xl font-bold text-orange-600">
+                    <p class="text-2xl font-bold text-rose-600">
                         Rp {{ number_format($order->total_harga, 0, ',', '.') }}
                     </p>
                 </div>

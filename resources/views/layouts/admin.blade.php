@@ -17,7 +17,7 @@
 
     {{-- Sidebar --}}
     <aside :class="[expanded ? 'w-64' : 'w-[70px]', mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0']"
-           class="fixed lg:relative inset-y-0 left-0 z-30 flex flex-col bg-gradient-to-b from-orange-700 to-orange-600 text-white transition-all duration-300 ease-in-out overflow-hidden shrink-0 h-full select-none">
+           class="fixed lg:relative inset-y-0 left-0 z-30 flex flex-col bg-gradient-to-b from-rose-900 to-pink-800 text-white transition-all duration-300 ease-in-out overflow-hidden shrink-0 h-full select-none">
 
         {{-- Brand --}}
         <div class="flex items-center h-16 px-4 gap-3 border-b border-white/10 shrink-0">
@@ -30,7 +30,7 @@
 
         {{-- Role label + toko --}}
         <div x-show="expanded" class="px-4 pt-4 pb-2">
-            <span class="text-xs font-semibold text-orange-200 uppercase tracking-widest">Penjual</span>
+            <span class="text-xs font-semibold text-rose-200 uppercase tracking-widest">Penjual</span>
             @if(auth()->user()->nama_toko)
             <p class="text-sm text-white/90 font-medium mt-0.5 truncate">{{ auth()->user()->nama_toko }}</p>
             @endif
@@ -38,7 +38,7 @@
 
         {{-- Saldo badge --}}
         <div x-show="expanded" class="mx-3 mb-3 bg-white/15 rounded-xl px-3 py-2.5">
-            <p class="text-[10px] text-orange-200 font-medium mb-0.5">Saldo Virtual</p>
+            <p class="text-[10px] text-rose-200 font-medium mb-0.5">Saldo Virtual</p>
             <p class="text-sm font-bold text-white">Rp {{ number_format(auth()->user()->saldo, 0, ',', '.') }}</p>
         </div>
 
@@ -51,6 +51,7 @@
                 ['route' => 'admin.orders.index',     'icon' => 'ph-receipt',       'label' => 'Antrian Pesanan'],
                 ['route' => 'admin.laporan',          'icon' => 'ph-chart-bar',     'label' => 'Laporan Harian'],
                 ['route' => 'admin.withdrawal.index', 'icon' => 'ph-money',         'label' => 'Tarik Dana'],
+                ['route' => 'admin.settings',         'icon' => 'ph-gear-six',      'label' => 'Pengaturan'],
             ];
             @endphp
             @foreach($nav as $item)
@@ -72,7 +73,7 @@
                 </div>
                 <div x-show="expanded" class="min-w-0">
                     <p class="text-xs font-semibold text-white truncate">{{ auth()->user()->name }}</p>
-                    <p class="text-[10px] text-orange-200">Penjual Kantin</p>
+                    <p class="text-[10px] text-rose-200">Penjual Kantin</p>
                 </div>
             </div>
         </div>
@@ -87,7 +88,7 @@
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         {{-- Topbar --}}
         <header class="h-16 bg-white border-b border-pink-100 flex items-center px-4 lg:px-6 gap-3 shrink-0 shadow-sm shadow-pink-100/50">
-            <button @click="mobileOpen = !mobileOpen" class="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+            <button @click="mobileOpen = !mobileOpen" class="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition-colors">
                 <i class="ph ph-list text-xl"></i>
             </button>
             <div class="flex-1">
@@ -101,7 +102,7 @@
                     <p class="text-sm font-semibold text-gray-800">{{ auth()->user()->nama_toko ?? auth()->user()->name }}</p>
                     <p class="text-xs text-gray-400">Penjual Kantin</p>
                 </div>
-                <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-sm shrink-0">
+                <div class="w-9 h-9 rounded-full bg-pink-100 text-pink-700 flex items-center justify-center font-bold text-sm shrink-0">
                     {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
                 </div>
                 <form method="POST" action="{{ route('logout') }}">

@@ -6,6 +6,8 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\User;
+use App\Http\Controllers\SuperAdmin\PaymentSettingController;
+use App\Http\Controllers\SuperAdmin\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Welcome ────────────────────────────────────────────────────────────────
@@ -42,9 +44,26 @@ Route::prefix('superadmin')
 
         // Top-up management
         Route::get('/topup',                          [SuperAdmin\TopupController::class, 'index'])->name('topup.index');
+        // Cash top-up must be before {topupRequest} to avoid route conflict
+        Route::get('/topup/cash',              [SuperAdmin\TopupController::class, 'cashIndex'])->name('topup.cash');
+        Route::post('/topup/cash/{user}',      [SuperAdmin\TopupController::class, 'cashTopup'])->name('topup.cash.store');
         Route::get('/topup/{topupRequest}',           [SuperAdmin\TopupController::class, 'show'])->name('topup.show');
         Route::patch('/topup/{topupRequest}/approve', [SuperAdmin\TopupController::class, 'approve'])->name('topup.approve');
         Route::patch('/topup/{topupRequest}/reject',  [SuperAdmin\TopupController::class, 'reject'])->name('topup.reject');
+
+        // Payment settings (bank / e-wallet)
+        Route::get('/payment-settings',                          [PaymentSettingController::class, 'index'])->name('payment-settings.index');
+        Route::post('/payment-settings',                         [PaymentSettingController::class, 'store'])->name('payment-settings.store');
+        Route::put('/payment-settings/{paymentSetting}',         [PaymentSettingController::class, 'update'])->name('payment-settings.update');
+        Route::delete('/payment-settings/{paymentSetting}',      [PaymentSettingController::class, 'destroy'])->name('payment-settings.destroy');
+        Route::patch('/payment-settings/{paymentSetting}/remove-qr', [PaymentSettingController::class, 'removeQr'])->name('payment-settings.removeQr');
+
+        // Account settings
+        Route::get('/settings',                               [SettingsController::class, 'index'])->name('settings.index');
+        Route::post('/settings/bulk-reset-password',          [SettingsController::class, 'bulkResetPassword'])->name('settings.bulkResetPassword');
+        Route::patch('/settings/{user}/name',                 [SettingsController::class, 'updateName'])->name('settings.updateName');
+        Route::patch('/settings/{user}/password',             [SettingsController::class, 'updatePassword'])->name('settings.updatePassword');
+        Route::patch('/settings/{user}/reset-password',       [SettingsController::class, 'resetPassword'])->name('settings.resetPassword');
 
         // Withdrawal management
         Route::get('/withdrawal',                                  [SuperAdmin\WithdrawalController::class, 'index'])->name('withdrawal.index');
@@ -70,6 +89,7 @@ Route::prefix('admin')
         Route::put('/menu/{menu}',              [Admin\MenuController::class, 'update'])->name('menu.update');
         Route::delete('/menu/{menu}',           [Admin\MenuController::class, 'destroy'])->name('menu.destroy');
         Route::patch('/menu/{menu}/status',     [Admin\MenuController::class, 'toggleStatus'])->name('menu.toggle');
+        Route::patch('/menu/{menu}/stok',       [Admin\MenuController::class, 'updateStok'])->name('menu.stok');
 
         // Orders / Antrian
         Route::get('/orders',                   [Admin\OrderController::class, 'index'])->name('orders.index');
@@ -82,6 +102,11 @@ Route::prefix('admin')
         // Pencairan Dana
         Route::get('/withdrawal',    [Admin\WithdrawalController::class, 'index'])->name('withdrawal.index');
         Route::post('/withdrawal',   [Admin\WithdrawalController::class, 'store'])->name('withdrawal.store');
+
+        // Settings (self)
+        Route::get('/pengaturan',              [Admin\SettingsController::class, 'index'])->name('settings');
+        Route::patch('/pengaturan/profil',     [Admin\SettingsController::class, 'updateName'])->name('settings.updateName');
+        Route::patch('/pengaturan/password',   [Admin\SettingsController::class, 'updatePassword'])->name('settings.updatePassword');
     });
 
 // ─── User (Siswa/Guru) ────────────────────────────────────────────────────────
@@ -104,4 +129,9 @@ Route::prefix('pesanan')
         Route::get('/saldo',        [User\SaldoController::class, 'index'])->name('saldo');
         Route::get('/saldo/topup',  [User\SaldoController::class, 'topupForm'])->name('saldo.topup');
         Route::post('/saldo/topup', [User\SaldoController::class, 'topupStore'])->name('saldo.topup.store');
+
+        // Settings (self)
+        Route::get('/pengaturan',              [User\SettingsController::class, 'index'])->name('settings');
+        Route::patch('/pengaturan/nama',       [User\SettingsController::class, 'updateName'])->name('settings.updateName');
+        Route::patch('/pengaturan/password',   [User\SettingsController::class, 'updatePassword'])->name('settings.updatePassword');
     });

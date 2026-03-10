@@ -9,30 +9,21 @@
 
     {{-- Back link --}}
     <a href="{{ route('admin.menu.index') }}"
-       class="inline-flex items-center gap-2 text-sm text-orange-600 hover:text-orange-700 font-medium mb-6">
+       class="inline-flex items-center gap-2 text-sm text-pink-600 hover:text-pink-700 font-medium mb-6">
         <i class="ph ph-arrow-left"></i> Kembali ke Daftar Menu
     </a>
 
     <div class="card p-6 lg:p-8"
          x-data="{
              preview: {{ $menu->foto ? json_encode($menu->foto_url) : 'null' }},
-             currentPhoto: {{ $menu->foto ? json_encode($menu->foto_url) : 'null' }},
-             handleFile(e) {
-                 const file = e.target.files[0];
-                 if (!file) return;
-                 const reader = new FileReader();
-                 reader.onload = (ev) => { this.preview = ev.target.result; };
-                 reader.readAsDataURL(file);
-             },
-             clearNewFile() {
-                 this.preview = this.currentPhoto;
-                 this.$refs.fotoInput.value = '';
+             updatePreview(val) {
+                 this.preview = val.trim() || null;
              }
          }">
 
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-pink-100">
             <h2 class="text-base font-semibold text-gray-800">
-                <i class="ph ph-pencil-simple text-orange-500 mr-1"></i> Edit: {{ $menu->nama }}
+                <i class="ph ph-pencil-simple text-pink-500 mr-1"></i> Edit: {{ $menu->nama }}
             </h2>
             @php
                 $kBg = match($menu->kategori) {
@@ -46,7 +37,7 @@
         </div>
 
         <form method="POST" action="{{ route('admin.menu.update', $menu) }}"
-              enctype="multipart/form-data" class="space-y-5">
+              class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -120,39 +111,29 @@
             {{-- Foto Menu --}}
             <div>
                 <label class="form-label">
-                    <i class="ph ph-image mr-1"></i> Foto Menu
+                    <i class="ph ph-image mr-1"></i> Foto Menu (URL)
                 </label>
 
+                {{-- Preview --}}
                 <div class="mb-3">
                     <template x-if="preview">
-                        <div class="relative inline-block">
-                            <img :src="preview" alt="Preview foto"
-                                 class="h-36 w-auto rounded-xl border border-pink-200 object-cover shadow-sm">
-                            {{-- Only show X if it's a NEW file preview --}}
-                            <template x-if="preview !== currentPhoto">
-                                <button type="button" @click="clearNewFile()"
-                                        class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 shadow">
-                                    <i class="ph ph-x"></i>
-                                </button>
-                            </template>
-                        </div>
+                        <img :src="preview" alt="Preview foto"
+                             class="h-36 w-auto rounded-xl border border-pink-200 object-cover shadow-sm">
                     </template>
                     <template x-if="!preview">
                         <div class="h-24 w-32 rounded-xl border-2 border-dashed border-pink-200 bg-pink-50 flex flex-col items-center justify-center text-pink-300 gap-1">
-                            <i class="ph ph-upload-simple text-2xl"></i>
+                            <i class="ph ph-image text-2xl"></i>
                             <span class="text-[10px] font-medium">Belum ada foto</span>
                         </div>
                     </template>
                 </div>
 
-                <p class="text-xs text-gray-400 mb-2">Kosongkan jika tidak ingin mengubah foto.</p>
-                <input type="file" id="foto" name="foto" accept="image/*"
-                       x-ref="fotoInput"
-                       @change="handleFile($event)"
-                       class="block w-full text-sm text-gray-600
-                              file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0
-                              file:text-sm file:font-semibold file:bg-orange-600 file:text-white
-                              hover:file:bg-orange-700 file:transition-colors file:cursor-pointer">
+                <input type="url" id="foto" name="foto"
+                       value="{{ old('foto', $menu->foto) }}"
+                       @input="updatePreview($event.target.value)"
+                       class="form-input @error('foto') error @enderror"
+                       placeholder="https://contoh.com/gambar-menu.jpg">
+                <p class="text-xs text-gray-400 mt-1.5">Masukkan URL gambar. Kosongkan jika tidak ingin mengubah foto.</p>
                 @error('foto')
                     <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
                         <i class="ph ph-warning-circle"></i> {{ $message }}
@@ -160,37 +141,45 @@
                 @enderror
             </div>
 
-            {{-- Status --}}
+            {{-- Stok --}}
             <div>
-                <label class="form-label">Status</label>
-                <div class="flex gap-4">
-                    <label class="flex items-center gap-2.5 cursor-pointer group">
-                        <input type="radio" name="status" value="tersedia"
-                               {{ old('status', $menu->status) === 'tersedia' ? 'checked' : '' }}
-                               class="w-4 h-4 accent-green-600">
-                        <span class="text-sm text-gray-700 group-hover:text-gray-900 font-medium">
-                            <i class="ph ph-toggle-right text-green-600 mr-1"></i>Tersedia
-                        </span>
-                    </label>
-                    <label class="flex items-center gap-2.5 cursor-pointer group">
-                        <input type="radio" name="status" value="habis"
-                               {{ old('status', $menu->status) === 'habis' ? 'checked' : '' }}
-                               class="w-4 h-4 accent-red-500">
-                        <span class="text-sm text-gray-700 group-hover:text-gray-900 font-medium">
-                            <i class="ph ph-toggle-left text-red-500 mr-1"></i>Habis
-                        </span>
-                    </label>
+                <label for="stok" class="form-label">
+                    <i class="ph ph-stack mr-1 text-pink-500"></i>
+                    Stok <span class="text-red-400">*</span>
+                </label>
+                <div class="flex items-start gap-4">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <input type="number" id="stok" name="stok"
+                                   value="{{ old('stok', $menu->stok) }}"
+                                   min="0" required
+                                   class="form-input w-40 @error('stok') error @enderror"
+                                   placeholder="0">
+                            <span class="text-sm text-gray-400">porsi</span>
+                        </div>
+                        @error('stok')
+                            <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                                <i class="ph ph-warning-circle"></i> {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+                    <div class="mt-1 px-3 py-2 rounded-xl bg-pink-50 border border-pink-100">
+                        <p class="text-xs text-pink-700 font-medium">Status otomatis</p>
+                        <p class="text-[11px] text-gray-500 mt-0.5">
+                            Stok &gt; 0 → <span class="text-green-600 font-semibold">Tersedia</span><br>
+                            Stok = 0 → <span class="text-red-500 font-semibold">Habis</span>
+                        </p>
+                    </div>
                 </div>
-                @error('status')
-                    <p class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
-                        <i class="ph ph-warning-circle"></i> {{ $message }}
-                    </p>
-                @enderror
+                <p class="text-xs text-gray-400 mt-1.5">
+                    <i class="ph ph-info text-pink-400"></i>
+                    Stok saat ini: <strong>{{ $menu->stok }} porsi</strong> — berkurang otomatis setiap ada pesanan masuk.
+                </p>
             </div>
 
             {{-- Submit --}}
             <div class="pt-2 flex items-center gap-3">
-                <button type="submit" class="btn-primary inline-flex items-center gap-2">
+                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold transition-colors shadow-sm">
                     <i class="ph ph-floppy-disk"></i> Perbarui Menu
                 </button>
                 <a href="{{ route('admin.menu.index') }}" class="btn-secondary">

@@ -37,10 +37,13 @@
         <nav class="flex-1 py-2 overflow-y-auto overflow-x-hidden space-y-0.5">
             @php
             $nav = [
-                ['route' => 'superadmin.dashboard',       'icon' => 'ph-squares-four',     'label' => 'Dashboard'],
-                ['route' => 'superadmin.users.index',     'icon' => 'ph-users-three',       'label' => 'Kelola Pengguna'],
-                ['route' => 'superadmin.topup.index',     'icon' => 'ph-coins',             'label' => 'Konfirmasi Top-Up'],
-                ['route' => 'superadmin.withdrawal.index','icon' => 'ph-money',             'label' => 'Pencairan Dana'],
+                ['route' => 'superadmin.dashboard',              'icon' => 'ph-squares-four',     'label' => 'Dashboard'],
+                ['route' => 'superadmin.users.index',            'icon' => 'ph-users-three',       'label' => 'Kelola Pengguna'],
+                ['route' => 'superadmin.topup.index',            'icon' => 'ph-coins',             'label' => 'Konfirmasi Top-Up'],
+                ['route' => 'superadmin.topup.cash',             'icon' => 'ph-hand-coins',        'label' => 'Top-Up Tunai'],
+                ['route' => 'superadmin.withdrawal.index',       'icon' => 'ph-money',             'label' => 'Pencairan Dana'],
+                ['route' => 'superadmin.payment-settings.index', 'icon' => 'ph-credit-card',       'label' => 'Rek. & E-Wallet'],
+                ['route' => 'superadmin.settings.index',         'icon' => 'ph-gear-six',          'label' => 'Pengaturan Akun'],
             ];
             @endphp
             @foreach($nav as $item)

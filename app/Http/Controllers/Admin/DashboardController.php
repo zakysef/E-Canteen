@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $stats = [
             'saldo'               => $seller->saldo,
             'pesanan_aktif'       => Order::where('seller_id', $seller->id)->whereIn('status', ['paid', 'preparing'])->count(),
-            'menu_tersedia'       => Menu::where('seller_id', $seller->id)->where('status', 'tersedia')->count(),
+            'menu_tersedia'       => Menu::where('seller_id', $seller->id)->where('status', 'tersedia')->where('stok', '>', 0)->count(),
             'pendapatan_hari_ini' => Order::where('seller_id', $seller->id)
                 ->whereDate('created_at', today())
                 ->whereIn('status', ['completed', 'ready', 'preparing', 'paid'])

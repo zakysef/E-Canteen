@@ -14,9 +14,9 @@
             $statusFilter = request('status', '');
             $statusOptions = [
                 ''           => ['label' => 'Semua',          'dot' => 'bg-gray-400'],
-                'paid'       => ['label' => 'Dibayar',        'dot' => 'bg-blue-500'],
-                'preparing'  => ['label' => 'Sedang Disiapkan','dot' => 'bg-indigo-500'],
-                'ready'      => ['label' => 'Siap Diambil',   'dot' => 'bg-green-500'],
+                'paid'       => ['label' => 'Dibayar',        'dot' => 'bg-pink-400'],
+                'preparing'  => ['label' => 'Sedang Disiapkan','dot' => 'bg-rose-400'],
+                'ready'      => ['label' => 'Siap Diambil',   'dot' => 'bg-rose-500'],
                 'completed'  => ['label' => 'Selesai',        'dot' => 'bg-gray-400'],
             ];
         @endphp
@@ -25,7 +25,7 @@
         <a href="{{ route('admin.orders.index', array_merge(request()->except('status','page'), ['status' => $val])) }}"
            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors border
                   {{ $statusFilter === $val
-                       ? 'bg-orange-600 text-white border-orange-600'
+                       ? 'bg-rose-600 text-white border-rose-600'
                        : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
             <span class="w-1.5 h-1.5 rounded-full {{ $cfg['dot'] }} {{ $statusFilter === $val ? 'bg-white' : '' }}"></span>
             {{ $cfg['label'] }}
@@ -38,17 +38,17 @@
         @php $waktuFilter = request('waktu', ''); @endphp
         <a href="{{ route('admin.orders.index', array_merge(request()->except('waktu','page'), ['waktu' => ''])) }}"
            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-colors
-                  {{ $waktuFilter === '' ? 'bg-gray-700 text-white border-gray-700' : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
+                  {{ $waktuFilter === '' ? 'bg-rose-600 text-white border-rose-600' : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
             Semua Waktu
         </a>
         <a href="{{ route('admin.orders.index', array_merge(request()->except('waktu','page'), ['waktu' => 'istirahat_1'])) }}"
            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-colors
-                  {{ $waktuFilter === 'istirahat_1' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
+                  {{ $waktuFilter === 'istirahat_1' ? 'bg-pink-600 text-white border-pink-600' : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
             <i class="ph ph-clock mr-1"></i>Istirahat 1
         </a>
         <a href="{{ route('admin.orders.index', array_merge(request()->except('waktu','page'), ['waktu' => 'istirahat_2'])) }}"
            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-colors
-                  {{ $waktuFilter === 'istirahat_2' ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
+                  {{ $waktuFilter === 'istirahat_2' ? 'bg-rose-500 text-white border-rose-500' : 'bg-white text-gray-600 border-pink-200 hover:bg-pink-50' }}">
             <i class="ph ph-clock mr-1"></i>Istirahat 2
         </a>
     </div>
@@ -62,12 +62,12 @@
     @foreach($orders as $order)
     @php
         $waktuLabel  = $order->waktu_pengambilan === 'istirahat_1' ? 'Istirahat 1' : 'Istirahat 2';
-        $waktuColor  = $order->waktu_pengambilan === 'istirahat_1' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700';
+        $waktuColor  = $order->waktu_pengambilan === 'istirahat_1' ? 'bg-pink-100 text-pink-700' : 'bg-rose-100 text-rose-700';
 
         $statusConfig = match($order->status) {
             'pending'   => ['bg-yellow-100 text-yellow-700', 'Menunggu Pembayaran'],
-            'paid'      => ['bg-blue-100 text-blue-700',     'Dibayar'],
-            'preparing' => ['bg-indigo-100 text-indigo-700', 'Sedang Disiapkan'],
+            'paid'      => ['bg-pink-100 text-pink-700',     'Dibayar'],
+            'preparing' => ['bg-rose-100 text-rose-700',     'Sedang Disiapkan'],
             'ready'     => ['bg-green-100 text-green-700',   'Siap Diambil'],
             'completed' => ['bg-gray-100 text-gray-700',     'Selesai'],
             'cancelled' => ['bg-red-100 text-red-700',       'Dibatalkan'],
@@ -99,18 +99,18 @@
 
             {{-- Right: total + timestamp --}}
             <div class="text-right shrink-0">
-                <p class="font-bold text-orange-600 text-base">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
+                <p class="font-bold text-rose-600 text-base">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
                 <p class="text-xs text-gray-400 mt-0.5">{{ $order->created_at->format('d M, H:i') }}</p>
             </div>
 
         </div>
 
         {{-- Items --}}
-        <div class="bg-gray-50 rounded-xl px-4 py-2.5 mb-3">
+        <div class="bg-pink-50/60 rounded-xl px-4 py-2.5 mb-3 border border-pink-100">
             <div class="flex flex-wrap gap-x-4 gap-y-1">
                 @foreach($order->items as $item)
                 <span class="text-sm text-gray-700">
-                    <span class="font-semibold text-orange-600">{{ $item->qty }}x</span>
+                    <span class="font-semibold text-rose-500">{{ $item->qty }}x</span>
                     {{ $item->nama_menu }}
                 </span>
                 @endforeach
@@ -120,7 +120,7 @@
         {{-- Action row --}}
         <div class="flex items-center justify-between gap-3 flex-wrap">
             <a href="{{ route('admin.orders.show', $order) }}"
-               class="text-xs text-orange-600 hover:underline font-medium inline-flex items-center gap-1">
+               class="text-xs text-rose-600 hover:underline font-medium inline-flex items-center gap-1">
                 <i class="ph ph-receipt"></i> Lihat Detail
             </a>
 
@@ -130,7 +130,7 @@
                     @csrf @method('PATCH')
                     <input type="hidden" name="status" value="preparing">
                     <button type="submit"
-                            class="btn-primary btn-sm inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700">
+                            class="btn-primary btn-sm inline-flex items-center gap-1.5">
                         <i class="ph ph-fork-knife"></i> Mulai Siapkan
                     </button>
                 </form>
@@ -140,7 +140,7 @@
                     @csrf @method('PATCH')
                     <input type="hidden" name="status" value="ready">
                     <button type="submit"
-                            class="btn-primary btn-sm inline-flex items-center gap-1.5 bg-green-600 hover:bg-green-700">
+                            class="btn-sm inline-flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors">
                         <i class="ph ph-check"></i> Tandai Siap Ambil
                     </button>
                 </form>
@@ -150,7 +150,7 @@
                     @csrf @method('PATCH')
                     <input type="hidden" name="status" value="completed">
                     <button type="submit"
-                            class="btn-primary btn-sm inline-flex items-center gap-1.5 bg-gray-600 hover:bg-gray-700">
+                            class="btn-sm inline-flex items-center gap-1.5 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors">
                         <i class="ph ph-check-circle"></i> Selesaikan
                     </button>
                 </form>

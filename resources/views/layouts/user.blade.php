@@ -51,6 +51,7 @@
                 ['route' => 'user.orders',       'icon' => 'ph-receipt',           'label' => 'Pesanan Saya'],
                 ['route' => 'user.saldo',        'icon' => 'ph-wallet',            'label' => 'Saldo & Transaksi'],
                 ['route' => 'user.saldo.topup',  'icon' => 'ph-plus-circle',       'label' => 'Top Up Saldo'],
+                ['route' => 'user.settings',     'icon' => 'ph-gear-six',          'label' => 'Pengaturan'],
             ];
             @endphp
             @foreach($nav as $item)

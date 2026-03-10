@@ -36,13 +36,19 @@ class Menu extends Model
 
     public function scopeTersedia($query)
     {
-        return $query->where('status', 'tersedia');
+        return $query->where('status', 'tersedia')->where('stok', '>', 0);
     }
 
     public function getFotoUrlAttribute(): string
     {
-        return $this->foto
-            ? asset('storage/' . $this->foto)
-            : asset('images/menu-default.png');
+        if (!$this->foto) {
+            return asset('images/menu-default.png');
+        }
+
+        if (str_starts_with($this->foto, 'http://') || str_starts_with($this->foto, 'https://')) {
+            return $this->foto;
+        }
+
+        return asset('storage/' . $this->foto);
     }
 }

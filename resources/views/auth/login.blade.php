@@ -4,8 +4,7 @@
 
 @section('content')
 
-{{-- Outer: fixed+scroll agar gradient selalu penuh, tidak ada gap putih --}}
-<div class="fixed inset-0 overflow-y-auto"
+<div class="fixed inset-0 flex items-center justify-center"
      style="background: linear-gradient(135deg, #be185d 0%, #db2777 50%, #f43f5e 100%);"
      x-data="{ showPassword: false }">
 
@@ -18,39 +17,34 @@
     <div class="fixed -bottom-20 -right-20 w-80 h-80 bg-rose-300/20 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
 
     {{-- Content wrapper --}}
-    <div class="relative z-10 min-h-full flex items-center justify-center p-4 sm:p-6 py-10">
-        <div class="w-full max-w-md">
+    <div class="relative z-10 w-full max-w-sm px-4">
 
-            {{-- Tombol Kembali ke Beranda — di atas card --}}
-            <div class="mb-5">
-                <a href="{{ url('/') }}"
-                   class="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm px-3.5 py-2 rounded-xl transition-all shadow-sm">
-                    <i class="ph ph-arrow-left text-sm"></i>
-                    Kembali ke Beranda
-                </a>
-            </div>
+        {{-- Card --}}
+        <div class="card shadow-2xl shadow-black/25 overflow-hidden">
 
-            {{-- Logo & branding --}}
-            <div class="flex flex-col items-center mb-7 text-center">
-                <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 shadow-xl ring-1 ring-white/30">
-                    <i class="ph ph-fork-knife text-white text-3xl"></i>
+            {{-- Card top: branding strip --}}
+            <div class="px-6 pt-5 pb-4 flex items-center gap-3 border-b border-pink-100">
+                <div class="w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg shadow-pink-300/50 shrink-0">
+                    <i class="ph ph-fork-knife text-white text-xl"></i>
                 </div>
-                <h2 class="text-3xl font-black text-white tracking-tight">E-Canteen</h2>
-                <p class="text-pink-100 text-sm mt-1">Sistem Pre-Order Kantin Digital</p>
+                <div>
+                    <p class="font-black text-gray-900 leading-tight">E-Canteen</p>
+                    <p class="text-xs text-gray-400">Sistem Pre-Order Kantin Digital</p>
+                </div>
             </div>
 
-            {{-- Card --}}
-            <div class="card p-8 sm:p-10 shadow-2xl shadow-black/20">
+            {{-- Card body --}}
+            <div class="px-6 py-5">
 
                 {{-- Header --}}
-                <div class="mb-7">
-                    <h1 class="text-2xl font-black text-gray-900 mb-1.5">Selamat Datang!</h1>
+                <div class="mb-5">
+                    <h1 class="text-xl font-black text-gray-900 mb-1">Selamat Datang!</h1>
                     <p class="text-sm text-gray-500">Masuk ke akun E-Canteen untuk mulai memesan.</p>
                 </div>
 
                 {{-- Google login button --}}
                 <a href="{{ route('auth.google') }}"
-                   class="flex items-center justify-center gap-3 w-full py-2.5 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm shadow-sm hover:shadow transition-all mb-5">
+                   class="flex items-center justify-center gap-3 w-full py-2 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm shadow-sm hover:shadow transition-all mb-4">
                     <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -61,14 +55,14 @@
                 </a>
 
                 {{-- Divider --}}
-                <div class="flex items-center gap-3 mb-5">
+                <div class="flex items-center gap-3 mb-4">
                     <div class="flex-1 h-px bg-gray-200"></div>
                     <span class="text-xs text-gray-400 font-medium">atau masuk dengan email</span>
                     <div class="flex-1 h-px bg-gray-200"></div>
                 </div>
 
                 {{-- Form --}}
-                <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
+                <form method="POST" action="{{ route('login.store') }}" class="space-y-4">
                     @csrf
 
                     {{-- Email --}}
@@ -148,19 +142,22 @@
                 </form>
 
                 {{-- Footer link --}}
-                <div class="mt-6 pt-6 border-t border-pink-100 text-center">
+                <div class="mt-4 pt-4 border-t border-pink-100 text-center space-y-2">
                     <p class="text-sm text-gray-500">
                         Belum punya akun?
                         <a href="{{ route('register') }}" class="text-pink-600 font-semibold hover:text-pink-700 transition-colors hover:underline ml-1">
-                            Daftar di sini
-                            <i class="ph ph-arrow-right text-xs ml-0.5"></i>
+                            Daftar di sini <i class="ph ph-arrow-right text-xs"></i>
                         </a>
                     </p>
+                    <a href="{{ url('/') }}"
+                       class="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-rose-600 transition-colors border border-gray-200 hover:border-rose-300 hover:bg-rose-50 px-4 py-2 rounded-xl w-full justify-center">
+                        <i class="ph ph-arrow-left text-sm"></i>
+                        Kembali ke Beranda
+                    </a>
                 </div>
 
-            </div>
-
-        </div>
+            </div>{{-- /card body --}}
+        </div>{{-- /card --}}
     </div>
 
 </div>

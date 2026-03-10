@@ -7,7 +7,7 @@
 <div class="flex gap-2 mb-6">
     @foreach(['' => 'Semua', 'pending' => 'Pending', 'approved' => 'Disetujui', 'rejected' => 'Ditolak'] as $val => $label)
     <a href="{{ route('superadmin.topup.index', ['status' => $val]) }}"
-        class="px-4 py-1.5 rounded-full text-sm font-medium border {{ request('status', '') === $val ? 'bg-indigo-600 text-white border-indigo-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50' }}">
+        class="px-4 py-1.5 rounded-full text-sm font-medium border {{ request('status', '') === $val ? 'bg-rose-600 text-white border-rose-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50' }}">
         {{ $label }}
     </a>
     @endforeach
@@ -32,7 +32,7 @@
                     <p class="font-medium text-gray-800">{{ $req->user->name }}</p>
                     <p class="text-xs text-gray-500">{{ $req->user->email }}</p>
                 </td>
-                <td class="px-6 py-3.5 font-semibold text-green-700">Rp {{ number_format($req->jumlah, 0, ',', '.') }}</td>
+                <td class="px-6 py-3.5 font-semibold text-rose-700">Rp {{ number_format($req->jumlah, 0, ',', '.') }}</td>
                 <td class="px-6 py-3.5 text-gray-500 capitalize">{{ str_replace('_', ' ', $req->metode) }}</td>
                 <td class="px-6 py-3.5 text-gray-500 text-xs">{{ $req->created_at->format('d M Y H:i') }}</td>
                 <td class="px-6 py-3.5 text-center">
@@ -42,7 +42,7 @@
                     </span>
                 </td>
                 <td class="px-6 py-3.5">
-                    <a href="{{ route('superadmin.topup.show', $req) }}" class="text-xs text-indigo-600 hover:underline">Detail</a>
+                    <a href="{{ route('superadmin.topup.show', $req) }}" class="text-xs text-rose-600 hover:underline">Detail</a>
                 </td>
             </tr>
             @empty

@@ -8,12 +8,12 @@
     <div class="flex gap-2">
         @foreach(['user' => 'Siswa/Guru', 'admin' => 'Penjual', 'super_admin' => 'Super Admin'] as $r => $label)
         <a href="{{ route('superadmin.users.index', ['role' => $r]) }}"
-            class="px-4 py-1.5 rounded-full text-sm font-medium border {{ request('role', 'user') === $r ? 'bg-indigo-600 text-white border-indigo-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50' }}">
+            class="px-4 py-1.5 rounded-full text-sm font-medium border {{ request('role', 'user') === $r ? 'bg-rose-600 text-white border-rose-600' : 'border-gray-300 text-gray-600 hover:bg-gray-50' }}">
             {{ $label }}
         </a>
         @endforeach
     </div>
-    <a href="{{ route('superadmin.users.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700">
+    <a href="{{ route('superadmin.users.create') }}" class="bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-rose-700">
         + Tambah Akun
     </a>
 </div>
@@ -21,7 +21,7 @@
 <form method="GET" class="mb-5">
     <input type="hidden" name="role" value="{{ $role }}">
     <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau email..."
-        class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-pink-400">
 </form>
 
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -60,7 +60,7 @@
                 </td>
                 <td class="px-6 py-3.5 text-right">
                     <div class="flex items-center justify-end gap-2">
-                        <a href="{{ route('superadmin.users.edit', $user) }}" class="text-xs text-indigo-600 hover:underline">Edit</a>
+                        <a href="{{ route('superadmin.users.edit', $user) }}" class="text-xs text-rose-600 hover:underline">Edit</a>
                         <form method="POST" action="{{ route('superadmin.users.toggle', $user) }}" class="inline">
                             @csrf @method('PATCH')
                             <button type="submit" class="text-xs {{ $user->is_active ? 'text-red-500' : 'text-green-600' }} hover:underline">

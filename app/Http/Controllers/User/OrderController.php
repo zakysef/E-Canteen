@@ -17,7 +17,7 @@ class OrderController extends Controller
         $sellers = User::where('role', 'admin')->where('is_active', true)->get();
 
         $menus = Menu::with('seller')
-            ->where('status', 'tersedia')
+            ->tersedia()
             ->when($request->seller, fn($q) => $q->where('seller_id', $request->seller))
             ->when($request->kategori, fn($q) => $q->where('kategori', $request->kategori))
             ->when($request->search, fn($q) => $q->where('nama', 'like', "%{$request->search}%"))
@@ -38,10 +38,18 @@ class OrderController extends Controller
 
         // Kelompokkan per seller
         $menuIds  = collect($data['items'])->pluck('menu_id');
-        $menus    = Menu::whereIn('id', $menuIds)->where('status', 'tersedia')->get()->keyBy('id');
+        $menus    = Menu::whereIn('id', $menuIds)->where('status', 'tersedia')->where('stok', '>', 0)->get()->keyBy('id');
 
         if ($menus->count() !== $menuIds->unique()->count()) {
-            return back()->with('error', 'Beberapa menu tidak tersedia.');
+            return back()->with('error', 'Beberapa menu tidak tersedia atau stok habis.');
+        }
+
+        // Validasi stok mencukupi untuk setiap item
+        foreach ($data['items'] as $item) {
+            $menu = $menus[$item['menu_id']];
+            if ($menu->stok < $item['qty']) {
+                return back()->with('error', "Stok {$menu->nama} tidak mencukupi. Tersisa {$menu->stok} porsi.");
+            }
         }
 
         $sellers = $menus->pluck('seller_id')->unique();
@@ -80,7 +88,15 @@ class OrderController extends Controller
 
         $user   = auth()->user();
         $menus  = Menu::whereIn('id', collect($data['items'])->pluck('menu_id'))
-            ->where('status', 'tersedia')->get()->keyBy('id');
+            ->where('status', 'tersedia')->where('stok', '>', 0)->lockForUpdate()->get()->keyBy('id');
+
+        // Validasi stok ulang di dalam transaksi (race condition protection)
+        foreach ($data['items'] as $item) {
+            if (!isset($menus[$item['menu_id']]) || $menus[$item['menu_id']]->stok < $item['qty']) {
+                $nama = $menus[$item['menu_id']]->nama ?? 'Menu';
+                return back()->with('error', "Stok {$nama} tidak mencukupi saat checkout.");
+            }
+        }
 
         $totalHarga = collect($data['items'])->sum(fn($i) => $menus[$i['menu_id']]->harga * $i['qty']);
 
@@ -108,6 +124,13 @@ class OrderController extends Controller
                     'qty'          => $item['qty'],
                     'harga_satuan' => $menu->harga,
                     'subtotal'     => $menu->harga * $item['qty'],
+                ]);
+
+                // Kurangi stok, auto-set habis jika stok = 0
+                $newStok = max(0, $menu->stok - $item['qty']);
+                $menu->update([
+                    'stok'   => $newStok,
+                    'status' => $newStok > 0 ? 'tersedia' : 'habis',
                 ]);
             }
 
@@ -150,6 +173,18 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order) {
             $order->update(['status' => 'cancelled']);
+
+            // Kembalikan stok untuk setiap item
+            foreach ($order->items as $item) {
+                if ($item->menu) {
+                    $newStok = $item->menu->stok + $item->qty;
+                    $item->menu->update([
+                        'stok'   => $newStok,
+                        'status' => 'tersedia',
+                    ]);
+                }
+            }
+
             auth()->user()->tambahSaldo(
                 $order->total_harga,
                 "Refund order #{$order->kode_order}",

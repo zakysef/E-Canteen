@@ -28,7 +28,7 @@
                 @endforeach
             </div>
             <div class="flex items-center justify-between">
-                <p class="font-bold text-orange-600">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
+                <p class="font-bold text-rose-600">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
                 <div class="flex gap-2">
                     @if($order->status === 'paid')
                     <form method="POST" action="{{ route('user.order.cancel', $order) }}">
@@ -43,17 +43,20 @@
             </div>
         </div>
         @if($order->status === 'ready')
-        <div class="bg-green-50 border-t border-green-100 px-5 py-3 text-sm font-semibold text-green-700 flex items-center gap-2">
-            ✅ Pesanan siap diambil! Segera ke kantin.
+        <div class="bg-rose-50 border-t border-rose-100 px-5 py-3 text-sm font-semibold text-rose-700 flex items-center gap-2">
+            <i class="ph ph-check-circle text-base"></i> Pesanan siap diambil! Segera ke kantin.
         </div>
         @endif
     </div>
     @empty
     <div class="py-16 text-center">
-        <p class="text-5xl mb-4">📦</p>
+        <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <i class="ph ph-receipt text-pink-400 text-3xl"></i>
+        </div>
         <p class="text-gray-500 mb-4">Belum ada pesanan.</p>
-        <a href="{{ route('user.catalog') }}" class="inline-block bg-orange-500 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-orange-600">
-            Mulai Pre-Order →
+        <a href="{{ route('user.catalog') }}" class="inline-flex items-center gap-2 bg-rose-500 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-rose-600 transition-colors">
+            <i class="ph ph-storefront text-base"></i>
+            Mulai Pre-Order
         </a>
     </div>
     @endforelse

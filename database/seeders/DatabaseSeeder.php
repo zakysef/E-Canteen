@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name'      => 'Super Admin',
             'email'     => 'superadmin@ecanteen.id',
-            'password'  => Hash::make('password'),
+            'password'  => Hash::make('superadmin40'),
             'role'      => 'super_admin',
             'is_active' => true,
         ]);
@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
         $this->command->table(
             ['Role', 'Email', 'Password'],
             [
-                ['Super Admin', 'superadmin@ecanteen.id', 'password'],
+                ['Super Admin', 'superadmin@ecanteen.id', 'superadmin40'],
                 ['Admin/Seller', 'sari@ecanteen.id', 'password'],
                 ['Admin/Seller', 'budi@ecanteen.id', 'password'],
                 ['User (Siswa)', 'ahmad@ecanteen.id', 'password'],

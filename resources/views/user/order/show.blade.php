@@ -16,15 +16,15 @@
     @php
         $statusConfig = match($order->status) {
             'pending'   => ['bg-yellow-100 text-yellow-700', 'Menunggu Pembayaran', 'ph-clock'],
-            'paid'      => ['bg-blue-100 text-blue-700',     'Dibayar',             'ph-check'],
-            'preparing' => ['bg-indigo-100 text-indigo-700', 'Sedang Disiapkan',    'ph-fork-knife'],
+            'paid'      => ['bg-pink-100 text-pink-700',     'Dibayar',             'ph-check'],
+            'preparing' => ['bg-rose-100 text-rose-700',     'Sedang Disiapkan',    'ph-fork-knife'],
             'ready'     => ['bg-green-100 text-green-700',   'Siap Diambil',        'ph-check-circle'],
             'completed' => ['bg-gray-100 text-gray-700',     'Selesai',             'ph-check-circle'],
             'cancelled' => ['bg-red-100 text-red-700',       'Dibatalkan',          'ph-x-circle'],
             default     => ['bg-gray-100 text-gray-600',     ucfirst($order->status), 'ph-clock'],
-        };
+        ];
         $waktuLabel = $order->waktu_pengambilan === 'istirahat_1' ? 'Istirahat 1' : 'Istirahat 2';
-        $waktuColor = $order->waktu_pengambilan === 'istirahat_1' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700';
+        $waktuColor = $order->waktu_pengambilan === 'istirahat_1' ? 'bg-pink-100 text-pink-700' : 'bg-rose-100 text-rose-700';
     @endphp
 
     {{-- Order header card --}}
@@ -63,7 +63,7 @@
             {{-- Seller info --}}
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Informasi Penjual</p>
-                <div class="bg-gray-50 rounded-xl p-4 space-y-2">
+                <div class="bg-pink-50/50 rounded-xl p-4 space-y-2 border border-pink-100">
                     <div class="flex items-center gap-2">
                         <div class="w-9 h-9 rounded-full bg-pink-100 text-pink-700 flex items-center justify-center font-bold text-sm shrink-0">
                             {{ strtoupper(substr($order->seller->nama_toko ?? $order->seller->name, 0, 2)) }}
@@ -83,7 +83,7 @@
             {{-- Waktu & Catatan --}}
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Detail Pesanan</p>
-                <div class="bg-gray-50 rounded-xl p-4 space-y-3">
+                <div class="bg-pink-50/50 rounded-xl p-4 space-y-3 border border-pink-100">
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-gray-500">Waktu Pengambilan</span>
                         <span class="badge {{ $waktuColor }}">
